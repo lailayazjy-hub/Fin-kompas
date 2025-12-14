@@ -1,0 +1,16 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #F7F7F7; /* Off-white background as requested */
+}
+/* Hide scrollbar for clean look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}

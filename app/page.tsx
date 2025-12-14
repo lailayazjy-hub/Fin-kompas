@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, ArrowRight, Plus, PieChart, TrendingUp, Wallet } from "lucide-react";
+import { BarChart3, ArrowRight, Plus, PieChart, TrendingUp, Wallet, ArrowRightLeft, Percent, ShieldAlert, Goal, Activity, ShieldCheck, CalendarRange, Sliders, Users, FileText } from "lucide-react";
 
 const apps = [
   {
@@ -23,23 +23,98 @@ const apps = [
     icon: PieChart,
     color: "bg-red-500/10 text-red-600 dark:text-red-400",
   },
-  // Placeholders to show the grid layout
   {
-    title: "Portfolio Tracker",
-    description: "Track your investments and analyze performance across multiple assets.",
-    href: "#",
-    icon: PieChart,
-    color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-    disabled: true,
+    title: "Reeks Analyse",
+    description: "Intelligent transaction matching and reconciliation with AI-powered analysis.",
+    href: "/reeks-analyse",
+    icon: ArrowRightLeft,
+    color: "bg-teal-500/10 text-teal-600 dark:text-teal-400",
   },
   {
-    title: "Budget Planner",
+    title: "Budget Shifter",
     description: "Smart budgeting tools to help you manage expenses and savings goals.",
-    href: "#",
+    href: "/budget-shifter",
     icon: Wallet,
     color: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-    disabled: true,
   },
+  {
+    title: "BTW Dashboard Pro",
+    description: "Comprehensive VAT analysis, reporting, and tax form preparation.",
+    href: "/btw-dashboard-pro",
+    icon: Percent,
+    color: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
+  },
+  {
+    title: "DebiteurenBeheer AI",
+    description: "AI-driven debtor management, credit risk analysis, and automated advice.",
+    href: "/debiteurenbeheer-ai",
+    icon: ShieldAlert,
+    color: "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+  },
+  {
+    title: "FinVisualisatie Doelen & KPIs",
+    description: "Visualiseer financiële doelen en KPI's met interactieve rapportages en analyses.",
+    href: "/finvisualisatie-doelen-and-kpis",
+    icon: Goal,
+    color: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400",
+  },
+  {
+    title: "FinVisualisatie & Controle",
+    description: "Comprehensive financial visualization, control checks, and AI analysis.",
+    href: "/finvisualisatie-en-controle",
+    icon: ShieldCheck,
+    color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  },
+  {
+    title: "Kosten Trendanalyse",
+    description: "Analyze cost trends, detect anomalies, and get AI-powered insights.",
+    href: "/kosten-trendanalyse",
+    icon: TrendingUp,
+    color: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400",
+  },
+  {
+    title: "Transitoria Dashboard",
+    description: "Manage prepaid costs, accrued revenue, and period allocations with AI.",
+    href: "/transitoria-dashboard",
+    icon: CalendarRange,
+    color: "bg-green-500/10 text-green-600 dark:text-green-400",
+  },
+  {
+    title: "Project Marge Dashboard",
+    description: "Analyze project margins, simulate scenarios, and get AI insights.",
+    href: "/project-marge",
+    icon: Sliders,
+    color: "bg-pink-500/10 text-pink-600 dark:text-pink-400",
+  },
+  {
+    title: "Business Macro Tracker",
+    description: "Track daily business activities, macro balance, and time budget.",
+    href: "/business-macro-tracker",
+    icon: Activity,
+    color: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+  },
+  {
+    title: "Lonen & WKR Assistent",
+    description: "Manage payroll, WKR analysis, and employee data with AI assistance.",
+    href: "/lonen-en-wkr-assistent",
+    icon: Users,
+    color: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
+  },
+  {
+    title: "Loonstrook Analyser",
+    description: "Analyze payslips, calculate full-time scenarios, and get AI insights.",
+    href: "/loonstrook-analyser",
+    icon: FileText,
+    color: "bg-lime-500/10 text-lime-600 dark:text-lime-400",
+  },
+  {
+    title: "Universal Contract Extractor Pro",
+    description: "Extract and analyze data from contracts and Excel files using AI.",
+    href: "/universal-contract-extractor-pro",
+    icon: FileText,
+    color: "bg-slate-500/10 text-slate-600 dark:text-slate-400",
+  },
+  // Placeholders to show the grid layout
   {
     title: "New Application",
     description: "More financial tools are currently under development.",
@@ -56,7 +131,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-6 py-24">
         {/* Header */}
         <div className="mb-20 text-center sm:text-left">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-6 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-6 bg-linear-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
             Financial Compass
           </h1>
           <p className="text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed">
@@ -83,7 +158,7 @@ export default function Home() {
                 {app.title}
               </h2>
               
-              <p className="text-zinc-500 dark:text-zinc-400 mb-8 flex-grow leading-relaxed">
+              <p className="text-zinc-500 dark:text-zinc-400 mb-8 grow leading-relaxed">
                 {app.description}
               </p>
               
