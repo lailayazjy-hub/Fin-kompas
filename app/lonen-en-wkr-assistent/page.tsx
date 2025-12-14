@@ -581,7 +581,7 @@ const LonenEnWkrAssistentPage: React.FC = () => {
                         <div className="flex flex-wrap gap-3 no-print" data-html2canvas-ignore="true">
                             {settings.showDemo && (
                                 <button 
-                                    onClick={() => { setExpenses(MOCK_EXPENSES); }}
+                                    onClick={() => { setExpenses([...MOCK_EXPENSES]); }}
                                     className="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 shadow-sm transition-all"
                                 >
                                     Demo Laden

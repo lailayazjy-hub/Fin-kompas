@@ -5,7 +5,7 @@ import { FileText, AlertCircle, FileSpreadsheet, ChevronLeft, ChevronRight, Zoom
 import * as pdfjsImport from 'pdfjs-dist';
 
 // Robustly handle ESM vs CommonJS/Default export structure
-const pdfjsLib = pdfjsImport.default || pdfjsImport;
+const pdfjsLib = (pdfjsImport as any).default || pdfjsImport;
 
 // Initialize worker source
 if (typeof window !== 'undefined' && pdfjsLib) {

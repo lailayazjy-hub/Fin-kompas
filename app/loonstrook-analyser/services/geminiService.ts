@@ -46,7 +46,11 @@ export const parsePayslip = async (file: File, sourceId: string): Promise<ParseR
                 description: { type: SchemaType.STRING },
                 amount: { type: SchemaType.NUMBER },
                 category: { type: SchemaType.STRING },
-                type: { type: SchemaType.STRING, enum: [LineItemType.INCOME, LineItemType.DEDUCTION, LineItemType.INFORMATION, LineItemType.NET_PAYOUT] },
+                type: { 
+                  type: SchemaType.STRING, 
+                  format: 'enum',
+                  enum: [LineItemType.INCOME, LineItemType.DEDUCTION, LineItemType.INFORMATION, LineItemType.NET_PAYOUT] 
+                },
                 aiRemark: { type: SchemaType.STRING }
               },
               required: ["description", "amount", "category", "type"]

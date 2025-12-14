@@ -175,7 +175,7 @@ export const MatchingModule: React.FC<Props> = ({ themeColors, language, useKNot
       setTimeout(() => {
           let newBank = [...bankItems];
           let newLedger = [...ledgerItems];
-          const newMatches = [];
+          const newMatches: {bank: TransactionEntry[], ledger: TransactionEntry[]}[] = [];
 
           // Simple Auto Match Logic: Exact Amount + Date within 7 days
           const matchedBankIds = new Set<string>();

@@ -34,7 +34,7 @@ export const analyzeFinancialData = async (records: ProjectRecord[]): Promise<st
       model: 'gemini-2.0-flash',
       contents: prompt,
     });
-    return response.text() || "Geen analyse beschikbaar.";
+    return response.text || "Geen analyse beschikbaar.";
   } catch (error) {
     console.error("Gemini Error:", error);
     return "Er is een fout opgetreden bij het ophalen van de analyse.";

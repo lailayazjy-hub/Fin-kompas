@@ -300,7 +300,7 @@ export const generatePDF = (sources: SourceDocument[], settings: AnalysisSetting
   });
 
   // Footer page numbers
-  const pageCount = doc.internal.getNumberOfPages();
+  const pageCount = (doc as any).internal.getNumberOfPages();
   for(let i = 1; i <= pageCount; i++) {
      doc.setPage(i);
      doc.setFontSize(8);
@@ -333,10 +333,10 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
         rows: [
             new TableRow({
                 children: [
-                    new TableCell({ children: [new Paragraph({ text: "Bestand", bold: true, color: "FFFFFF" })], shading: { fill: primaryColor } }),
-                    new TableCell({ children: [new Paragraph({ text: "Type", bold: true, color: "FFFFFF" })], shading: { fill: primaryColor } }),
-                    new TableCell({ children: [new Paragraph({ text: "Startdatum", bold: true, color: "FFFFFF" })], shading: { fill: primaryColor } }),
-                    new TableCell({ children: [new Paragraph({ text: "Waarde", bold: true, color: "FFFFFF" })], shading: { fill: primaryColor } }),
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Bestand", bold: true, color: "FFFFFF" })] })], shading: { fill: primaryColor } }),
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Type", bold: true, color: "FFFFFF" })] })], shading: { fill: primaryColor } }),
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Startdatum", bold: true, color: "FFFFFF" })] })], shading: { fill: primaryColor } }),
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Waarde", bold: true, color: "FFFFFF" })] })], shading: { fill: primaryColor } }),
                 ]
             }),
             ...consolidatedRows
@@ -351,7 +351,7 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
     const riskTableRows = allRisks.map(r => {
         return new TableRow({
             children: [
-                new TableCell({ children: [new Paragraph({ text: r.severity === 'High' ? "HOOG" : r.severity === 'Medium' ? "Medium" : "Laag", bold: true, color: r.severity === 'High' ? "D32F2F" : "000000" })] }),
+                new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: r.severity === 'High' ? "HOOG" : r.severity === 'Medium' ? "Medium" : "Laag", bold: true, color: r.severity === 'High' ? "D32F2F" : "000000" })] })] }),
                 new TableCell({ children: [new Paragraph(r.sourceName)] }),
                 new TableCell({ children: [new Paragraph(r.description)] }),
             ]
@@ -363,9 +363,9 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
         rows: [
             new TableRow({
                 children: [
-                    new TableCell({ children: [new Paragraph({ text: "Niveau", bold: true })], shading: { fill: "EEEEEE" } }),
-                    new TableCell({ children: [new Paragraph({ text: "Bron", bold: true })], shading: { fill: "EEEEEE" } }),
-                    new TableCell({ children: [new Paragraph({ text: "Risico Omschrijving", bold: true })], shading: { fill: "EEEEEE" } }),
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Niveau", bold: true })] })], shading: { fill: "EEEEEE" } }),
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Bron", bold: true })] })], shading: { fill: "EEEEEE" } }),
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Risico Omschrijving", bold: true })] })], shading: { fill: "EEEEEE" } }),
                 ]
             }),
             ...riskTableRows
@@ -375,36 +375,36 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
 
     // --- 3. INDIVIDUAL FILE SECTIONS ---
     const fileSections = sources.map(s => {
-        const sections = [];
+        const sections: any[] = [];
         
         // Page Break before each new file (except the first one maybe, but logic is simpler this way)
         sections.push(new Paragraph({ children: [new PageBreak()] }));
         
         // Header
-        sections.push(new Paragraph({ text: s.name, heading: HeadingLevel.HEADING_1, color: primaryColor }));
+        sections.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children: [new TextRun({ text: s.name, color: primaryColor })] }));
         sections.push(new Paragraph({ text: `Type: ${s.data.contractType} | Valuta: ${s.data.currency}`, spacing: { after: 200 } }));
         sections.push(new Paragraph({ text: s.data.summary, spacing: { after: 400 }, style: "Italic" }));
 
         // === BUSINESS INTELLIGENCE SECTION ===
-        sections.push(new Paragraph({ text: "Bedrijfsanalyse & Beheer", heading: HeadingLevel.HEADING_2, color: primaryColor }));
+        sections.push(new Paragraph({ heading: HeadingLevel.HEADING_2, children: [new TextRun({ text: "Bedrijfsanalyse & Beheer", color: primaryColor })] }));
         
         // Strategic Context (New)
         if (s.data.businessAnalysis) {
-             sections.push(new Paragraph({ text: "Strategische Context", bold: true, spacing: { before: 100, after: 100 } }));
+             sections.push(new Paragraph({ children: [new TextRun({ text: "Strategische Context", bold: true })], spacing: { before: 100, after: 100 } }));
              sections.push(new Paragraph({ text: s.data.businessAnalysis.introduction, spacing: { after: 200 }, style: "Italic" }));
              
              if (s.data.businessAnalysis.pros && s.data.businessAnalysis.pros.length > 0) {
-                 sections.push(new Paragraph({ text: "Voordelen:", bold: true }));
+                 sections.push(new Paragraph({ children: [new TextRun({ text: "Voordelen:", bold: true })] }));
                  s.data.businessAnalysis.pros.forEach(p => sections.push(new Paragraph({ text: `• ${p}`, indent: { left: 360 } })));
              }
              
              if (s.data.businessAnalysis.cons && s.data.businessAnalysis.cons.length > 0) {
-                 sections.push(new Paragraph({ text: "Nadelen/Risico's:", bold: true, spacing: { before: 100 } }));
+                 sections.push(new Paragraph({ children: [new TextRun({ text: "Nadelen/Risico's:", bold: true })], spacing: { before: 100 } }));
                  s.data.businessAnalysis.cons.forEach(c => sections.push(new Paragraph({ text: `• ${c}`, indent: { left: 360 } })));
              }
 
              if (s.data.businessAnalysis.frameworks && s.data.businessAnalysis.frameworks.length > 0) {
-                 sections.push(new Paragraph({ text: "Frameworks:", bold: true, spacing: { before: 100 } }));
+                 sections.push(new Paragraph({ children: [new TextRun({ text: "Frameworks:", bold: true })], spacing: { before: 100 } }));
                  sections.push(new Paragraph({ text: s.data.businessAnalysis.frameworks.join(", "), indent: { left: 360 } }));
              }
 
@@ -412,24 +412,24 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
         }
 
         // Governance Table
-        sections.push(new Paragraph({ text: "Governance & Tijdslijnen", bold: true, spacing: { before: 100, after: 100 } }));
+        sections.push(new Paragraph({ children: [new TextRun({ text: "Governance & Tijdslijnen", bold: true })], spacing: { before: 100, after: 100 } }));
         sections.push(new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
                 new TableRow({ children: [
-                    new TableCell({ children: [new Paragraph({text: "Startdatum", bold: true})], shading: {fill: "F3F4F6"} }), 
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Startdatum", bold: true })] })], shading: {fill: "F3F4F6"} }), 
                     new TableCell({ children: [new Paragraph(s.data.dates.startDate || '-')] }),
-                    new TableCell({ children: [new Paragraph({text: "Auto-Verlenging", bold: true})], shading: {fill: "F3F4F6"} }), 
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Auto-Verlenging", bold: true })] })], shading: {fill: "F3F4F6"} }), 
                     new TableCell({ children: [new Paragraph(s.data.dates.isAutoRenewal ? "Ja" : "Nee")] }),
                 ]}),
                 new TableRow({ children: [
-                    new TableCell({ children: [new Paragraph({text: "Einddatum", bold: true})], shading: {fill: "F3F4F6"} }), 
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Einddatum", bold: true })] })], shading: {fill: "F3F4F6"} }), 
                     new TableCell({ children: [new Paragraph(s.data.dates.endDate || 'Onbepaald')] }),
-                    new TableCell({ children: [new Paragraph({text: "Opzegtermijn", bold: true})], shading: {fill: "F3F4F6"} }), 
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Opzegtermijn", bold: true })] })], shading: {fill: "F3F4F6"} }), 
                     new TableCell({ children: [new Paragraph(`${s.data.dates.noticePeriodDays} dagen`)] }),
                 ]}),
                  new TableRow({ children: [
-                    new TableCell({ children: [new Paragraph({text: "Toepasselijk Recht", bold: true})], shading: {fill: "F3F4F6"} }), 
+                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Toepasselijk Recht", bold: true })] })], shading: {fill: "F3F4F6"} }), 
                     new TableCell({ children: [new Paragraph(s.data.governingLaw || '-')], columnSpan: 3 }),
                 ]}),
             ]
@@ -437,7 +437,7 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
         
         // Parties Table
         if (s.data.parties.length > 0) {
-             sections.push(new Paragraph({ text: "Betrokken Partijen", bold: true, spacing: { before: 200, after: 100 } }));
+             sections.push(new Paragraph({ children: [new TextRun({ text: "Betrokken Partijen", bold: true })], spacing: { before: 200, after: 100 } }));
              const partyRows = s.data.parties.map(p => new TableRow({
                 children: [
                     new TableCell({ children: [new Paragraph(p.name)] }),
@@ -448,7 +448,11 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
             sections.push(new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 rows: [
-                    new TableRow({ children: [new TableCell({ children: [new Paragraph({text: "Naam", bold: true})], shading: {fill: "F3F4F6"} }), new TableCell({ children: [new Paragraph({text: "Rol", bold: true})], shading: {fill: "F3F4F6"} }), new TableCell({ children: [new Paragraph({text: "BTW/ID", bold: true})], shading: {fill: "F3F4F6"} })] }),
+                    new TableRow({ children: [
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Naam", bold: true })] })], shading: {fill: "F3F4F6"} }), 
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Rol", bold: true })] })], shading: {fill: "F3F4F6"} }), 
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "BTW/ID", bold: true })] })], shading: {fill: "F3F4F6"} })
+                    ] }),
                     ...partyRows
                 ]
             }));
@@ -456,7 +460,7 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
 
         // Operational Specs
          if (s.data.specifications && s.data.specifications.length > 0) {
-            sections.push(new Paragraph({ text: "Operationele Specificaties (Assets)", bold: true, spacing: { before: 200, after: 100 } }));
+            sections.push(new Paragraph({ children: [new TextRun({ text: "Operationele Specificaties (Assets)", bold: true })], spacing: { before: 200, after: 100 } }));
             const specRows = s.data.specifications.map(spec => new TableRow({
                 children: [
                     new TableCell({ children: [new Paragraph(spec.category)] }),
@@ -467,7 +471,11 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
             sections.push(new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 rows: [
-                    new TableRow({ children: [new TableCell({ children: [new Paragraph({text: "Categorie", bold: true})], shading: {fill: "F3F4F6"} }), new TableCell({ children: [new Paragraph({text: "Item", bold: true})], shading: {fill: "F3F4F6"} }), new TableCell({ children: [new Paragraph({text: "Waarde", bold: true})], shading: {fill: "F3F4F6"} })] }),
+                    new TableRow({ children: [
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Categorie", bold: true })] })], shading: {fill: "F3F4F6"} }), 
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Item", bold: true })] })], shading: {fill: "F3F4F6"} }), 
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Waarde", bold: true })] })], shading: {fill: "F3F4F6"} })
+                    ] }),
                     ...specRows
                 ]
             }));
@@ -476,7 +484,7 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
 
 
         // === FINANCIALS SECTION ===
-        sections.push(new Paragraph({ text: "Financiële Analyse", heading: HeadingLevel.HEADING_2, color: primaryColor }));
+        sections.push(new Paragraph({ heading: HeadingLevel.HEADING_2, children: [new TextRun({ text: "Financiële Analyse", color: primaryColor })] }));
         
         const finRows = s.data.financials.items.map(i => new TableRow({
             children: [
@@ -492,21 +500,21 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
             rows: [
                 new TableRow({
                     children: [
-                        new TableCell({ children: [new Paragraph({ text: "Omschrijving", bold: true })], shading: { fill: "F3F4F6" } }),
-                        new TableCell({ children: [new Paragraph({ text: "Categorie", bold: true })], shading: { fill: "F3F4F6" } }),
-                        new TableCell({ children: [new Paragraph({ text: "Freq", bold: true })], shading: { fill: "F3F4F6" } }),
-                        new TableCell({ children: [new Paragraph({ text: "Bedrag", bold: true })], shading: { fill: "F3F4F6" } }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Omschrijving", bold: true })] })], shading: { fill: "F3F4F6" } }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Categorie", bold: true })] })], shading: { fill: "F3F4F6" } }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Freq", bold: true })] })], shading: { fill: "F3F4F6" } }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Bedrag", bold: true })] })], shading: { fill: "F3F4F6" } }),
                     ]
                 }),
                 ...finRows
             ]
         }));
-        sections.push(new Paragraph({ text: `Totaal: ${s.data.financials.totalValue.toLocaleString('nl-NL')}`, alignment: AlignmentType.RIGHT, bold: true, spacing: { before: 200, after: 400 } }));
+        sections.push(new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun({ text: `Totaal: ${s.data.financials.totalValue.toLocaleString('nl-NL')}`, bold: true })], spacing: { before: 200, after: 400 } }));
 
 
         // Calculations (Optional)
         if (s.data.calculations && s.data.calculations.length > 0) {
-            sections.push(new Paragraph({ text: "Gedetecteerde Berekeningen", bold: true, color: primaryColor, spacing: { before: 200 } }));
+            sections.push(new Paragraph({ children: [new TextRun({ text: "Gedetecteerde Berekeningen", bold: true, color: primaryColor })], spacing: { before: 200 } }));
             const calcRows = s.data.calculations.map(c => new TableRow({
                 children: [
                     new TableCell({ children: [new Paragraph(c.label)] }),
@@ -517,7 +525,11 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
             sections.push(new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 rows: [
-                    new TableRow({ children: [new TableCell({ children: [new Paragraph({text: "Omschrijving", bold: true})], shading: {fill: "F3F4F6"} }), new TableCell({ children: [new Paragraph({text: "Formule", bold: true})], shading: {fill: "F3F4F6"} }), new TableCell({ children: [new Paragraph({text: "Resultaat", bold: true})], shading: {fill: "F3F4F6"} })] }),
+                    new TableRow({ children: [
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Omschrijving", bold: true })] })], shading: {fill: "F3F4F6"} }), 
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Formule", bold: true })] })], shading: {fill: "F3F4F6"} }), 
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Resultaat", bold: true })] })], shading: {fill: "F3F4F6"} })
+                    ] }),
                     ...calcRows
                 ]
             }));
@@ -567,7 +579,7 @@ export const generateWord = async (sources: SourceDocument[], settings: Analysis
                 
                 new Paragraph({ text: "Management Samenvatting", heading: HeadingLevel.HEADING_1 }),
                 summaryTable,
-                new Paragraph({ text: `Totaal Geconsolideerde Waarde: ${totalValue.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR' })}`, bold: true, spacing: { before: 200, after: 400 } }),
+                new Paragraph({ children: [new TextRun({ text: `Totaal Geconsolideerde Waarde: ${totalValue.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR' })}`, bold: true })], spacing: { before: 200, after: 400 } }),
 
                 new Paragraph({ text: "Geconsolideerd Risicoprofiel", heading: HeadingLevel.HEADING_1 }),
                 riskTable,

@@ -47,7 +47,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                   value={settings.appName}
                   onChange={(e) => handleChange('appName', e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-opacity-50 outline-none transition-all"
-                  style={{ focusRingColor: primaryColor }}
+                  style={{ '--tw-ring-color': primaryColor } as React.CSSProperties}
                 />
               </div>
               <div>

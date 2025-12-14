@@ -51,8 +51,6 @@ import {
   CartesianGrid
 } from 'recharts';
 import * as XLSX from 'xlsx';
-// @ts-ignore
-import html2pdf from 'html2pdf.js';
 
 import { AppSettings, ThemeName, ProcessedData, FinancialRecord, ReportSection, ReportItem, NBASettings, RiskProfile, MaterialityBenchmark, KPIItem, CustomGoal } from './types';
 import { DEFAULT_SETTINGS, THEMES, WoodpeckerLogo, TRANSLATIONS } from './constants';
@@ -1375,7 +1373,7 @@ export default function FinVisualisatiePage() {
       }));
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     // Dynamically select content based on viewMode
     let elementId = 'report-content';
     if (viewMode === 'nba') elementId = 'nba-content';
@@ -1383,8 +1381,10 @@ export default function FinVisualisatiePage() {
     const element = document.getElementById(elementId);
     if (!element) return;
     
-    // @ts-ignore
-    if (html2pdf) {
+    try {
+        const html2pdfModule = await import('html2pdf.js');
+        const html2pdf = (html2pdfModule as any).default || html2pdfModule;
+
         const opt = {
             margin: 10,
             filename: `${settings.appName}_${viewMode === 'nba' ? 'Materiality' : 'Report'}.pdf`,
@@ -1392,10 +1392,10 @@ export default function FinVisualisatiePage() {
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
-        // @ts-ignore
         html2pdf().set(opt).from(element).save();
-    } else {
-        alert("PDF functionaliteit is nog aan het laden. Probeer het over enkele seconden opnieuw.");
+    } catch (error) {
+        console.error("Failed to load html2pdf", error);
+        alert("PDF functionaliteit kon niet worden geladen.");
     }
   };
 
