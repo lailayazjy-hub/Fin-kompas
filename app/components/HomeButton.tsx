@@ -14,7 +14,7 @@ export default function HomeButton() {
   return (
     <Link
       href="/"
-      className="fixed top-4 left-4 z-50 p-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-full shadow-lg hover:shadow-xl transition-all border border-slate-200 dark:border-slate-700 flex items-center justify-center group"
+      className="fixed top-20 left-4 z-50 p-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-full shadow-lg hover:shadow-xl transition-all border border-slate-200 dark:border-slate-700 flex items-center justify-center group"
       aria-label="Go to Home"
     >
       <Home className="w-6 h-6" />
